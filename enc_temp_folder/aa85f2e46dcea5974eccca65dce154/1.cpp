@@ -7,7 +7,7 @@ class Figure {
 public:
 	string name;
 	void Message() {
-		printf("!\n");
+		printf("\n");
 	}
 };
 
