@@ -6,7 +6,7 @@ const int N = 10;
 class Figure {
 public:
 	string name;
-	void Message() {
+	virtual void Message() {
 		printf("!\n");
 	}
 };
