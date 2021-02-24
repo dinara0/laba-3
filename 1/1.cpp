@@ -4,8 +4,6 @@ using namespace std;
 const int N = 10;
 
 class Figure {
-private:
-	int S = 0;
 public:
 	virtual void Message() {
 		printf("!\n");
@@ -17,9 +15,7 @@ public:
 	void Message() {
 		printf("Circle\n");
 	}
-	void Circle_method() {
-		printf("Circle_method()\n");
-	}
+
 };
 
 class Square : public Figure {
@@ -27,9 +23,7 @@ public:
 	void Message() {
 		printf("Square\n");
 	}
-	void Square_method() {
-		printf("Square_method()\n");
-	}
+	
 };
 
 
@@ -41,17 +35,14 @@ public:
 	// функция добавления элемента
 	virtual void delete_value(int index) = NULL;
 	// функция удаления элемента
-	//virtual void prev() = NULL;
-	//virtual void next() = NULL;
 	virtual int get_count() = NULL;
 	// функция возвращает размер массива
 };
 class Array : public Iarray {
 private:
 	Figure **objects; // указатель на указатель объекта класса Figure
-	//int i;
-	int maxsize;//размер массива
-	int size;
+	int maxsize;//размер массива максимальный
+	int size; // размер массива
 public:
 		Array(int size) {// конструктор 
 		maxsize = size;
@@ -59,40 +50,35 @@ public:
 		objects = new Figure * [size];// создаю массив из объектов
 	}
 	void set_value(int i, Figure *value) {
-		if (i < 0 || i >= maxsize) {
+		if (i < 0 || i >= maxsize) {// если индекс выходит за размеры массива
 			printf("Выход за границы массива\n");
 			return;
 		}
-		if (i > size) {
-			objects[size + 1] = value;
+		if (i > size) {// если индекс больше нынещнего размера массива, но меньше максимального
+			objects[size + 1] = value;//добавляем объект в свободную ячейку
 			size++;
 			return;
 		}
-		objects[i] = value;
+		objects[i] = value;// вставляем элемент вместо другого объекта
 	}
 
 	Figure &get_value(int i) {
-		return *objects[i];
+		return *objects[i];//возвращаем объект по индексу
 	}
 	int get_count() {
-		return size;
+		return size;//возвращаем нынешний размер массива
 	}
 	virtual void delete_value(int index) {
-		if (index < 0 || index >= size) {
+		if (index < 0 || index >= size) {//если выходим за нынешний размер массива
 			printf("Выход за границы массива");
 			return;
 		}
 		for (int i = index + 1, j = index; i < this->size; i++, j++) {
-			objects[j] = objects[i];
+			objects[j] = objects[i];//смещаем элементы, " затирая" элемент по индексу
 		}
 		this->size--;
 	}
-	/*virtual void prev() {
-		i--;
-	}
-	void next(int i) {
-		i++;
-	}*/
+	
 };
 
 
@@ -101,19 +87,19 @@ int main()
 	setlocale(LC_ALL, "Rus");
 	srand(time(NULL));// для генерации разных рандомных значений каждую отладку
 	//Array a(N);
-	Iarray *a= new Array (N);
-	for (int i = 0;i < a->get_count();i++)
+	Iarray *a= new Array (N);//создаю массив
+	for (int i = 0;i < a->get_count();i++)//заполняю массив объектами
 		//a->set_value(i, new Figure);
 		if (rand() % 2 == 0)
 			a->set_value(i, new Circle);
 		else 
 			a->set_value(i, new Square);
-	for (int i = 0;i < a->get_count();i++) {
+	for (int i = 0;i < a->get_count();i++) {//отладочный вывод
 		printf("\t%i. ", i + 1);
 		a->get_value(i).Message();
 	}
 	for (int i = 0; i < 100; i++) {
-		int count = rand() % 3;
+		int count = rand() % 3;// случайная генерация действий над массивом 
 		//int n = a->get_count();
 		int index = 0;
 		//if (n)
@@ -151,13 +137,7 @@ int main()
 			break;
 		case 2:// запуск метода у случайного объекта из хранилища
 			printf("Вызывается метод объекта из ячейки %i\n", index+1);
-			/*Circle* c = dynamic_cast<Circle*>(a->get_value(index));
-			if (c != NULL)
-				c->Circle_method();
 			
-			Square* s = dynamic_cast<Square*>(a->get_value(index));
-			if (s != NULL)
-				s->Square_method();*/
 				a->get_value(index).Message();
 			break;
 
